@@ -1,0 +1,23 @@
+SQL> SET SERVEROUTPUT ON
+
+SQL> CREATE TABLE areas (radius NUMBER, area NUMBER);
+
+Table created.
+
+SQL> DECLARE
+
+BEGIN
+
+radius_var NUMBER;
+
+area_var NUMBER;
+
+pi NUMBER:= 3.14;
+
+FOR radius var IN 5.. 9 LOOP area_var := pi*radius_var*radius_var; dbms_output.put_line(area_var);
+
+INSERT INTO areas VALUES (radius_var, area_var);
+
+END LOOP;
+
+END;
