@@ -1,0 +1,35 @@
+--Create Table and Insert Records— 
+create table emp(id int, name varchar(10), salary int, address varchar(30), age int, primary 
+key(id));  
+insert into emp(id,name,salary,address,age) values(1,'Amogh', 45000, 'Roha-Raigad', 19);  
+insert into emp(id,name,salary,address,age) values(2,'Shreya', 42000, 'Mahad-Raigad', 19);  
+insert into emp(id,name,salary,address,age) values(3,'Rohit', 43000, 'Alibaug-Raigad', 20);  
+insert into emp(id,name,salary,address,age) values(4,'Atharva', 55000, 'Murud-Raigad', 19);  
+insert into emp(id,name,salary,address,age) values(5,'Balaji', 45000, 'Mangaon-Raigad', 19); 
+insert into emp(id,name,salary,address,age) values(6,'Jignesh', 46000, 'Panvel-Raigad', 20); --Update— 
+update emp set salary=55000 where name='Balaji';  --Delete record— 
+delete from emp where id=5; --Alter Table-- alter table emp add email varchar(15);  --Update Table— 
+update emp set email='amogh@gmail.com' where id=1;  
+update emp set email='shreya@gmail.com' where id=2;  
+update emp set email='rohit@gmail.com' where id=3;  
+update emp set email='atharva@gmail.com' where id=4;  
+update emp set email='balaji@gmail.com' where id=5; 
+update emp set email='jignesh@gmail.com' where id=6;
+
+--Queries with operators— 
+select * from emp where id=1 and name='Amogh';and  
+select * from emp where id=1 or id=5;or  
+select * from emp where name like 'a%';  
+select * from emp where name like 'r%t';  
+select * from emp where salary between 42000 and 45000; between  
+select * from emp where address in('Roha-Raigad','Alibaug-Raigad','Mangaon-Raigad');in  
+select * from emp where address not in('Roha-Raigad','Alibaug-Raigad','Mangaon-Raigad');not in  --Views— 
+create view emp_view as select id, name, address from emp;  
+select * from emp_view;  --Indexes— 
+create index emp_index on emp(id);  
+select * from emp where id=1; --Sequences— 
+create table emp1(id int not null auto_increment primary key, name varchar(100));  
+insert into emp1(name) values('Amogh');  
+insert into emp1(name) values('Shreya');  
+select * from emp1;  
+alter table emp1 set auto_increment=1; select * from emp1;  --Drop Table— drop table emp1
