@@ -1,0 +1,71 @@
+
+15)
+Cursor
+
+Write a PL/SQL block of code using Cursor that will merge the data available in the newly created table N_RollCall with the data available in the table O_RollCall. If the data in the first table already exist in the second table then that data should be skipped.
+-- Step 1: Create tables
+CREATE TABLE O_RollCall (
+    Roll_no NUMBER PRIMARY KEY,
+    Name VARCHAR2(30)
+);
+
+CREATE TABLE N_RollCall (
+    Roll_no NUMBER PRIMARY KEY,
+    Name VARCHAR2(30)
+);
+
+-- Step 2: Insert sample data
+INSERT INTO O_RollCall (Roll_no, Name) VALUES (1, 'Maya');
+INSERT INTO O_RollCall (Roll_no, Name) VALUES (2, 'Gopal');
+
+INSERT INTO N_RollCall (Roll_no, Name) VALUES (2, 'Gopal');  -- duplicate
+INSERT INTO N_RollCall (Roll_no, Name) VALUES (3, 'Neha');   -- new
+INSERT INTO N_RollCall (Roll_no, Name) VALUES (4, 'Rohan');  -- new
+
+COMMIT;
+
+-- Step 3: Enable DBMS Output
+SET SERVEROUTPUT ON;
+
+-- Step 4: Cursor PL/SQL block to merge tables
+DECLARE
+    CURSOR c_new IS
+        SELECT Roll_no, Name FROM N_RollCall;
+
+    v_roll N_RollCall.Roll_no%TYPE;
+    v_name N_RollCall.Name%TYPE;
+    v_check NUMBER;
+BEGIN
+    OPEN c_new;
+    LOOP
+        FETCH c_new INTO v_roll, v_name;
+        EXIT WHEN c_new%NOTFOUND;
+
+        BEGIN
+            -- Use a separate variable to check existence
+            SELECT 1 INTO v_check
+            FROM O_RollCall
+            WHERE Roll_no = v_roll;
+
+            -- If exists, skip
+            DBMS_OUTPUT.PUT_LINE('Skipping Roll_no: ' || v_roll);
+
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                -- If not exists, insert
+                INSERT INTO O_RollCall (Roll_no, Name)
+                VALUES (v_roll, v_name);
+                DBMS_OUTPUT.PUT_LINE('Inserted Roll_no: ' || v_roll);
+        END;
+    END LOOP;
+    CLOSE c_new;
+
+    COMMIT;
+
+    -- Display final contents of O_RollCall
+    DBMS_OUTPUT.PUT_LINE('Final O_RollCall Table:');
+    FOR rec IN (SELECT * FROM O_RollCall ORDER BY Roll_no) LOOP
+        DBMS_OUTPUT.PUT_LINE('Roll_no: ' || rec.Roll_no || ', Name: ' || rec.Name);
+    END LOOP;
+END;
+/
