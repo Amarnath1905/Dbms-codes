@@ -1,0 +1,36 @@
+import java.util.*;
+
+public class PageReplacement {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter frames: ");
+        int f = sc.nextInt();
+        System.out.print("Enter pages: ");
+        int n = sc.nextInt();
+        int[] p = new int[n];
+        System.out.println("Enter reference string:");
+        for (int i = 0; i < n; i++) p[i] = sc.nextInt();
+
+        fifo(p, f);
+    }
+    static void fifo(int[] p,int f){
+        System.out.printf("/t/fifo/t");
+        Queue<Integer>q=new LinkedList<>();
+        Set<Integer>s = new HashSet<>();
+        int faults = 0;
+        for(int x:p){
+            if(s.contains(x))
+                System.out.println(s + "HIT");
+            else{
+                if(s.size()== f){
+                    s.remove(q.poll());
+                }
+                s.add(x);
+                q.add(x);
+                faults++;
+                System.out.println(s + "MISS");
+            }
+        }
+        System.out.println("Faults" + faults);
+    }
+}
