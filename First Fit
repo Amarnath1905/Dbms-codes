@@ -1,0 +1,44 @@
+import java.util.*;
+public class Main
+{
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		System.out.println("Enter no of memory blocks");
+		int m= sc.nextInt();
+		System.out.println("enter processes");
+		int p= sc.nextInt();
+		int blocks[]=new int[m];
+		int processes[]=new int[p];
+		int allocation[]=new int[p];
+		int remainingAfterAlloc[]=new int[p];
+		System.out.println("Enter the blocks");
+		    for(int i=0;i<m;i++)
+		        blocks[i]=sc.nextInt();
+		System.out.println("enter processes");
+		    for(int i=0;i<p;i++)
+		        processes[i]=sc.nextInt();
+	    Arrays.fill(allocation,-1);
+	    Arrays.fill(remainingAfterAlloc,-1);
+	    for(int i=0;i<p;i++){
+	        for(int j=0;j<m;j++){
+	            if(blocks[j]>allocation[i]){
+	                allocation[i]=j;
+	                blocks[j]-=allocation[i];
+	                remainingAfterAlloc[i]=blocks[i];
+	                break;
+	            }
+	        }
+	       
+	    }
+	    
+	    System.out.println("processes,fill processes");
+	    for(int i=0;i<p;i++){
+	        if(allocation[i]!=-1){
+	            System.out.println(i+ "/t/t" +processes[i] +"/t/t" +allocation
+	            [i] +"/t/t" +remainingAfterAlloc[i]);
+	        }
+	        else
+	            System.out.println(i +"/t/t" +processes[i] +"/t/Not allocated/t");
+	            
+	    }
+	    
