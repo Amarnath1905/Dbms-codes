@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+from imutils.video import VideoStream
+import RPi.GPIO as GPIO
+import time
+
+Buzzer_pin = 14
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(Buzzer_pin, GPIO.OUT)
+
+diff_threshold = 50000
+
+vs = VideoStream(src=0).start()
+time.sleep(2) 
+
+def getImage():
+    im = vs.read()
+    im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    im = cv2.blur(im, (20, 20))
+
+    print("📸 Image Captured")   
+
+    return im
+
+old_image = getImage()
+
+while True:
+    new_image = getImage()
+    diff = cv2.absdiff(old_image, new_image)
+    diff_score = np.sum(diff)
+
+    if diff_score > diff_threshold:
+        print("⚠ Movement Detected:", diff_score)
+        GPIO.output(Buzzer_pin, GPIO.HIGH)
+        time.sleep(0.5)
+        GPIO.output(Buzzer_pin, GPIO.LOW)
+        time.sleep(0.5)
+
+    old_image = new_image
+    time.sleep(0.1)
